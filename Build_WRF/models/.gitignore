@@ -1,0 +1,3 @@
+# Ignore all models, keep the directory
+*
+!.gitignore
