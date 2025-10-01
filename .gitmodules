@@ -1,0 +1,6 @@
+[submodule "Build_WRF/WPS"]
+	path = Build_WRF/WPS
+	url = https://github.com/wrf-model/WPS.git
+[submodule "Build_WRF/source"]
+	path = Build_WRF/source
+	url = https://github.com/wrf-model/WRF.git
