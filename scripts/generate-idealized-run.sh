@@ -1,6 +1,6 @@
 #!/bin/bash
 if [ -z "$1" ] ; then 
-	echo "Usage ./automate-the-thing.sh {RUN_NUMBER}"
+	echo "Usage ./generate-idealized-input.sh {RUN_NUMBER}"
 	exit 0
 fi
 PROJECT_DIR="/home/mok/miniguc"
