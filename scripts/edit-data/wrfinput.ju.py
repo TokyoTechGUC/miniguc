@@ -5,9 +5,9 @@ from glob import glob
 import sys, os
 
 is_py = os.path.basename(sys.argv[0]) == 'wrfinput.ju.py'
-RUN_ID = int(sys.argv[1]) if is_py and len(sys.argv) > 1 else 37
+RUN_ID = int(sys.argv[1]) if is_py and len(sys.argv) > 1 else 45
 
-root_dir = '/home/guc/'
+root_dir = '/home/mok/miniguc/'
 data_dir = f'runs/{RUN_ID:03}*/'
 root_data_dir = glob(root_dir + data_dir)[0]
 
@@ -38,7 +38,7 @@ def list_variables(dataset: Dataset) -> None:
     print('\n'.join(map(lambda x: f'{x.name}: {dataset[x.name].__dict__.get('description')} {x.dimensions}', dataset.variables.values())))
 
 dataset = Dataset(all_files[0], format="NETCDF4")
-# list_variables(dataset)
+list_variables(dataset)
 
 # %%
 
@@ -136,6 +136,26 @@ def modify_reduce_vapor(src: Dataset) -> Dataset:
     src.variables['QVAPOR'][:] *= 0.01
     return src
 
+# %%
+
+def modify_urban_params(src: Dataset) -> Dataset:
+    attrs = src.__dict__
+    mask = src.variables['LU_INDEX'][0][:] == attrs['ISURBAN']
+    urban_vars = {
+        'BUILD_SURF_RATIO': 0.25,
+        'BUILD_HEIGHT': 1,
+        'STDH_URB2D': 0.5,
+        'LF_URB2D': 0.25,
+    }
+    for name, value in urban_vars.items():
+        if name == 'LF_URB2D':
+            continue
+        src.variables[name][0][mask] = value
+
+    for i in range(3):
+        src.variables['LF_URB2D'][0][i][mask] = urban_vars['LF_URB2D']
+    return src
+
 #%%
 
 import os
@@ -189,6 +209,7 @@ with Dataset(all_files[0], 'r', format='NETCDF4') as src:
         # out = modify_random_initial_winds(out)
         out = modify_remove_sin_cos_alpha(out)
         # out = modify_reduce_vapor(out)
+        out = modify_urban_params(out)
 
         var_names = [ 'T', 'THM', 'MU', 'P', 'AL', 'P_HYD', 'Q2', 'T2', 'TH2',
             'PSFC', 'QVAPOR', 'TSLB', 'TMN', 'TSK', 'SST', 'VAR',

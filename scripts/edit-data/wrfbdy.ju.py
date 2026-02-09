@@ -10,7 +10,7 @@ import sys, os
 is_py = os.path.basename(sys.argv[0]) == 'wrfbdy.ju.py'
 RUN_ID = int(sys.argv[1]) if is_py and len(sys.argv) > 1 else 24
 
-root_dir = '/home/guc/'
+root_dir = '/home/mok/miniguc/'
 data_dir = f'runs/{RUN_ID:03}*/'
 root_data_dir = glob(root_dir + data_dir)[0]
 
@@ -34,7 +34,7 @@ dataset = Dataset(all_files[0])
 # print(dataset.__dict__) 
 
 # A function to list all the variables in this file
-# list_variables(dataset)
+list_variables(dataset)
 
 # print(dataset.variables['U_BXS'][0][0])
 # print(dataset.variables['U_BXS'].dimensions)

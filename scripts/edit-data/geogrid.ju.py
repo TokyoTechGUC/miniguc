@@ -6,9 +6,9 @@ from glob import glob
 import os, sys
 
 is_py = os.path.basename(sys.argv[0]) == 'geogrid.ju.py'
-root_dir = '/home/guc/'
-all_files = glob(root_dir + '/Build_WRF/WPS/' + 'geo_em*')
-# all_files = glob(root_dir + 'runs/025*/' + 'geo_em*')
+root_dir = '/home/mok/miniguc/'
+all_files = glob(root_dir + 'Build_WRF/WPS/' + 'geo_em*')
+# all_files = glob(root_dir + 'runs/051*/' + 'geo_em*')
 
 # %%
 
@@ -120,6 +120,8 @@ def modify_landuse(src: Dataset) -> Dataset:
         'forest': 5,     # Mixed Forests
     }
 
+    rural_land_type = 'grassland'
+
     # Modify the land use index. To check the variables,
     # see LANDUSE.TBL and num_land_cat in namelist.input
     # 24 - for USGS (default); 20 for MODIS
@@ -128,7 +130,7 @@ def modify_landuse(src: Dataset) -> Dataset:
     # 40 - for NCLD
     # Currently using USGS (num_land_cat = 24)
     modified_lu = src.variables['LU_INDEX'][:]
-    modified_lu[0][:] = land_use_cat['grassland']
+    modified_lu[0][:] = land_use_cat[rural_land_type]
     modified_lu[0][urban_mask] = land_use_cat['urban']
     src.variables['LU_INDEX'][:] = modified_lu
 
@@ -141,13 +143,14 @@ def modify_landuse(src: Dataset) -> Dataset:
     # https://forum.mmm.ucar.edu/threads/difference-between-landusef-and-frc_urb2d.10455/
     # Basically you need to modify the fraction of land to the corresponding
     # array index
+    # !!!!! IMPORTANT: The index is 0-indexed, so it should be the value in LANDUSE minus 1 !!!!!
     modified_landusef = src.variables['LANDUSEF'][:]
     modified_landusef[:] = 0 # Reset everything, probably easier
-    modified_landusef[0][land_use_cat['grassland']][:] = 1.0
+    modified_landusef[0][land_use_cat[rural_land_type] - 1][:] = 1.0
 
     # No grassland here
-    modified_landusef[0][land_use_cat['grassland']][urban_mask] = 0
-    modified_landusef[0][land_use_cat['urban']][urban_mask] = 1.0
+    modified_landusef[0][land_use_cat[rural_land_type] - 1][urban_mask] = 0
+    modified_landusef[0][land_use_cat['urban'] - 1][urban_mask] = 1.0
     src.variables['LANDUSEF'][:] = modified_landusef
 
     return src
@@ -171,9 +174,9 @@ def modify_urban_area(src: Dataset) -> Dataset:
     src     source dataset
     '''
     urban_vars = [
-        ('MH_URB2D',            5   ),
+        ('MH_URB2D',            10   ),
         ('ZD_URB2D',            3   ),
-        ('Z0_URB2D',            100 ),
+        ('Z0_URB2D',            1 ),
         ('BUILD_AREA_FRACTION', 0.25 ),
         ('LF_URB2D_S',          0.25 ),
     ]

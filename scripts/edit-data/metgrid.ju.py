@@ -5,7 +5,7 @@ import sys, os
 
 is_py = os.path.basename(sys.argv[0]) == 'metgrid.ju.py'
 
-root_dir = '/home/guc/'
+root_dir = '/home/mok/miniguc/'
 all_files = glob(root_dir + 'Build_WRF/WPS/met_em*')
 # all_files = glob(root_dir + 'runs/016*/met_em*')
 

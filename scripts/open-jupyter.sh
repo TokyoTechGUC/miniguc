@@ -1,3 +1,3 @@
 #!/bin/sh
 cd
-jupyter lab --no-browser --port=8080
+jupyter notebook --no-browser --port=8080

@@ -1,0 +1,1 @@
+{"cmd": "\nfrom netCDF4 import Dataset\nfrom glob import glob\n", "cmd_opts": " --cell_id=NYpki1Lsdz -s", "import_complete": 1, "terminal": "kitty"}

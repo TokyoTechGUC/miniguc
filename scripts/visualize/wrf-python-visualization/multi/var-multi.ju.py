@@ -8,7 +8,6 @@ import cartopy.crs as crs
 from wrf import get_cartopy, getvar, latlon_coords, to_np, extract_times, ALL_TIMES
 
 Z0_VALUES = [0.5, 2, 5, 10]
-# AHE_VALUES = [50, 100, 200]
 AHE_VALUES = [0, 0, 10, 50, 100, 500]
 threshold_datetime = np.datetime64('2025-03-10')
 
