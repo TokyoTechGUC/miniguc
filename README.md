@@ -1,14 +1,25 @@
 # WRF Setup for Mini PC
 
 **Research title**: Development of Small-Scale WRF "Urban" Model for Educational and Research Purposes
+
 **Author**: Mok Wattanasopon and Alvin C. G. Varquez
+
+**Project Report**: [Google Drive](https://drive.google.com/file/d/1M1c2tJbW2_1ucP7tviHG4ANNv81H-fVp/view?usp=sharing)
+
+**Presentation Slides**: [Google Drive](https://drive.google.com/file/d/1rjtzaVJYwyH0ASkUkk031Y1sGFeKTb3L/view?usp=sharing)
 
 ## Background
 This repository is created as a part of undergraduate Independent Research Project (IRP) of [Global Urban Climatology](https://www.tse.ens.titech.ac.jp/~varquez/en/) laboratory, Institute of Science Tokyo (formerly Tokyo Institute of Technology).
 
 The purpose of this project is to create a small scale environment of [Weather Research and Forecasting (WRF)](https://github.com/wrf-model/WRF) model to simulate various idealized condition, and provide more accessible option of climate simulation study in research institutions.
 
-## Setup
+## Preview
+<p align="center">
+   <img src="https://github.com/user-attachments/assets/93319dad-67d1-43d4-941f-c068754e1263" width="400">
+</p>
+<p align="center">A vertical cross-section plot of idealized grassland with urban area in the middle, created and ran using this model</p>
+
+## Setup (To be updated)
 ### Installation
 * Clone this repository with sub modules
 ```
