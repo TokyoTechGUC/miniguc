@@ -37,7 +37,7 @@ mkdir results
 
 ## Script Details
 * `download-data`: contains a script to download real-time geographical data, the downloaded data should show up in the directory along with the data date shown on `download-log.txt`. The default number of data files is 30 files containing from 0-hour prediction to 90-hour prediction with 3 hour interval between data.
-* `edit-data`: contain a python script to edit `geo_em`, `met_em`, `wrfinput`, and `wrfbdy`. The `geogrid` and `metgrid` script find the data directly on the `wps` directory, while `wrfinput` and `wrfbdy` you need to specify the run id named in the `runs` folder (see Best Practice section).
+* `edit-data`: contain a python script to edit `geo_em`, `met_em`, `wrfinput`, and `wrfbdy`. The `geogrid` and `metgrid` script find the data directly on the `wps` directory, while `wrfinput` and `wrfbdy` you need to specify the run id named in the `runs` folder (see Best Practices section).
 * `visualize`: contains all necessary scripts for visualizing data
     * `wrf-python-visualization` and `simple-visualization`: contains scripts for python visualization using `matplotlib` module, `wrf-python` module is required for `wrf-python-visualization` scripts. The scripts used `.ju.py` extension, which you can convert it to `.ipynb` using [jupynium](https://github.com/kiyoon/jupynium.nvim).
     * `generate-video.sh` and other shell scripts: a script to call `ffmpeg` to create a video from multiple plot images.
@@ -53,7 +53,7 @@ mkdir results
 * `open-jupyter.sh`: a script to host a jupyter notebook for the machine. Check out the command to SSH tunnel this jupyter in the useful commands section [here](https://github.com/TokyoTechGUC/miniguc/wiki/Commands)
 * `namelists`: not really related to the scripts, but I put it here as a sample namelist configuration for WPS and WRF simulation runs. This is important to replicate a runtime performance from the experiment.
 
-## Best Practice
+## Best Practices
 * Follow the same directory structure as [the installation guide](https://github.com/TokyoTechGUC/miniguc/wiki/WRF). To be more specific, the compatible directory structure for this script is shown as follows
 ```
 /home/guc
