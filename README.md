@@ -19,51 +19,66 @@ The purpose of this project is to create a small scale environment of [Weather R
 </p>
 <p align="center">A vertical cross-section plot of idealized grassland with urban area in the middle, created and ran using this model</p>
 
-## Setup (To be updated)
+## Setup
 ### Installation
-* Clone this repository with sub modules
+* Check out the guide on how to install WRF and WPS [here](https://github.com/TokyoTechGUC/miniguc/wiki/WRF).
+    * Ideally, you might want to name the user as `guc` for compatibility of some hard-coded values in the python scripts (sorry for the design flaw).
+* On the home directory (`~`) of the machine, you can clone this repository as a `script` directory
 ```
-git clone --recurse-submodules git@github.com:TokyoTechGUC/miniguc.git
+cd ~
+git clone https://github.com/TokyoTechGUC/miniguc.git scripts
 ```
-* Test system environment following [this](https://github.com/TokyoTechGUC/miniguc/wiki/WRF#system-environment-tests) instruction. The test files are already provided in `/TESTS` directory. You only need to install `gfortran` and `csh` (or compilers corresponding to your CPU)
-* Install all required libraries in `Build_WRF/LIBRARIES`, following the [instruction](https://github.com/TokyoTechGUC/miniguc/wiki/WRF#building-libraries)
-* Test the libraries again following [this instruction](https://github.com/TokyoTechGUC/miniguc/wiki/WRF#library-compatibility-tests)
-* Copy the directory `Build_WRF/source` to `Build_WRF/models/real`. This directory is to manage multiple models in case you want to compile different model type or modify the code of the model. Note that you can name the directory however you want
+* Create two directories `modified-files` and `results` in the home directory to contain the modified input and visualization results from the scripts respectively.
 ```
-cp -r Build_WRF/source Build_WRF/models Build_WRF/models/real
+cd ~
+mkdir modified-files
+mkdir results
 ```
-* Compile the model in `Build_WRF/models/real` (or the directory that you named) following [this instruction](https://github.com/TokyoTechGUC/miniguc/wiki/WRF#building-wrf)
-* Build WPS in `Build_WRF/WPS` following [this instruction](https://github.com/TokyoTechGUC/miniguc/wiki/WRF#building-wps)
-* Download the static geography data. You can go to `scripts/` and edit the *last line* of `get-data.sh` to point to `Build_WRF/DATA` directory in your project
-    * Make sure to edit `geog_data_paht` in `Build_WRF/WPS/namelist.wps` as shown in [this instruction](https://github.com/TokyoTechGUC/miniguc/wiki/WRF#static-geography-data)
-* Go to `runs/run-template` and make a symlink to any files that are required (absolute path is recommended)
-```
-ln -sf ../../Build_WRF/models/real/phys/noahmp/parameters/MPTABLE.TBL MPTABLE.TBL
-ln -sf ../../Build_WRF/models/real/main/ndown.exe ndown.exe
-ln -sf ../../Build_WRF/models/real/main/real.exe real.exe
-ln -sf ../../Build_WRF/models/real/main/tc.exe tc.exe
-ln -sf ../../Build_WRF/models/real/main/wrf.exe wrf.exe
-```
-### Running the Model
-* Copy `run-template` into a new file. The naming convention is `<3 digit number>-<name>-<separated>-<by>-<dashes>`, e.g. `001-my-first-run`, `032-seabreeze-urban-reduced-ahe`, etc.
-* Set `Build_WRF/WPS/namelist.wps` and `runs/<your-run-name>/namelist.input` to match what you want to run. Mostly it would be simulation date and number of days
-* Check the variables you want to modify in `scripts/edit-data/*.ju.py`. If you want to know how each file works, you can check [this wiki](https://github.com/TokyoTechGUC/miniguc/wiki/Modification)
-* Then, you can use the automated script to run everything from WPS to WRF setup
-```
-script/automate-the-thing.sh <your-run-number>
-```
-For example, if you want to run WPS, modify the data, and send it to run `001-my-first-run`, you can run
-```
-script/automate-the-thing.sh 1
-```
-* You can then move to the run directory and run
-```
-mpirun -np <cpu core number> ./wrf.exe
-```
-e.g. I use 14 cores for my run, so I run
-```
-mpirun -np 14 ./wrf.exe
-```
-* The script file `do-everything.sh` also give a rough template if you want to run multiple runs in succession.
 
-## Directory Structure
+## Script Details
+* `download-data`: contains a script to download real-time geographical data, the downloaded data should show up in the directory along with the data date shown on `download-log.txt`. The default number of data files is 30 files containing from 0-hour prediction to 90-hour prediction with 3 hour interval between data.
+* `edit-data`: contain a python script to edit `geo_em`, `met_em`, `wrfinput`, and `wrfbdy`. The `geogrid` and `metgrid` script find the data directly on the `wps` directory, while `wrfinput` and `wrfbdy` you need to specify the run id named in the `runs` folder (see Best Practice section).
+* `visualize`: contains all necessary scripts for visualizing data
+    * `wrf-python-visualization` and `simple-visualization`: contains scripts for python visualization using `matplotlib` module, `wrf-python` module is required for `wrf-python-visualization` scripts. The scripts used `.ju.py` extension, which you can convert it to `.ipynb` using [jupynium](https://github.com/kiyoon/jupynium.nvim).
+    * `generate-video.sh` and other shell scripts: a script to call `ffmpeg` to create a video from multiple plot images.
+* `generate-idealized-run.sh`: a script to automate the process of generating files in WPS, modify `geo_em` and `met_em` files, generate data in WRF, and modify `wrfinput` and `wrfbdy`. All generated files are moved into its simulation folder. To call it, you can use
+```
+./generate-idealized-run.sh {run_id}
+```
+* `refresh-run.sh`: a script to remove and regenerate `wrfbdy` and `wrfinput` files of that run, along with re-modify the files according to scripts in `scripts/edit-data`.
+```
+./refresh-run.sh {run_id}
+```
+* `run-multiple.sh`: a script to continuously run and time multiple simulations. In order to use it, you have to modify `ID_LIST` variable in the files with your preferred run IDs. For example, if you want to run a simulation `runs/001-test-run`, `runs/019-ahe-100`, `runs/029-z0-1`, you have to modify `ID_LIST` as `(1 19 29)`. Then, you can simply call `./run-multiple.sh` and everything should start working assuming you have all the necessary files. Running on `tmux` is recommended.
+* `open-jupyter.sh`: a script to host a jupyter notebook for the machine. Check out the command to SSH tunnel this jupyter in the useful commands section [here](https://github.com/TokyoTechGUC/miniguc/wiki/Commands)
+* `namelists`: not really related to the scripts, but I put it here as a sample namelist configuration for WPS and WRF simulation runs. This is important to replicate a runtime performance from the experiment.
+
+## Best Practice
+* Follow the same directory structure as [the installation guide](https://github.com/TokyoTechGUC/miniguc/wiki/WRF). To be more specific, the compatible directory structure for this script is shown as follows
+```
+/home/guc
+├── data
+├── libraries
+├── models
+│   ├── real
+│   └── ... (other models)
+├── modified-files
+├── results
+├── runs
+│   ├── run-template
+│   └── ... (other simulations)
+├── scripts (this repository)
+├── tests
+├── tmp
+├── wps
+├── wps-geog
+└── wrf
+```
+However, it is also possible to modify the scripts to call from the correct directory as well. This is more of a personal preferences.
+
+* In `runs` directory, it is preferred to refer the run by its ID, i.e. the naming convention is `{id}-{run_name}`. For example, `001-test-run`, `084-grassland-modified-ahe`.
+
+## Side Note
+A virtualbox of this mini PC WRF model is saved in an SSD of GUC laboratory, please feel free to check it out. 
+
+The `README` file is provided in this [wiki](https://github.com/TokyoTechGUC/miniguc/wiki/VirtualBox) as well.
