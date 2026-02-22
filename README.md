@@ -53,6 +53,9 @@ mkdir results
 * `open-jupyter.sh`: a script to host a jupyter notebook for the machine. Check out the command to SSH tunnel this jupyter in the useful commands section [here](https://github.com/TokyoTechGUC/miniguc/wiki/Commands)
 * `namelists`: not really related to the scripts, but I put it here as a sample namelist configuration for WPS and WRF simulation runs. This is important to replicate a runtime performance from the experiment.
 
+## Wiki
+Many useful things to help you work with this model is provided in the [wiki](https://github.com/TokyoTechGUC/miniguc/wiki) section of the repository, please check it out as well!
+
 ## Best Practices
 * Follow the same directory structure as [the installation guide](https://github.com/TokyoTechGUC/miniguc/wiki/WRF). To be more specific, the compatible directory structure for this script is shown as follows
 ```
