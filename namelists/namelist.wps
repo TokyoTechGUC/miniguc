@@ -1,0 +1,35 @@
+&share
+ wrf_core = 'ARW',
+ max_dom = 1,
+ start_date = '2025-06-17_00:00:00',
+ end_date   = '2025-06-19_00:00:00',
+ interval_seconds = 10800
+/
+
+&geogrid
+ parent_id         =   1,
+ parent_grid_ratio =   1,
+ i_parent_start    =   1,
+ j_parent_start    =   1,
+ e_we              =  100,
+ e_sn              =  100,
+ geog_data_res = '30s+modis_2010+y2010_urb+cgls_veg+y2010_ahe',
+ dx = 10000,
+ dy = 10000,
+ map_proj = 'lambert',
+ ref_lat   =  35.00,
+ ref_lon   = 140.00,
+ truelat1  =  25.0,
+ truelat2  =  50.0,
+ stand_lon = 140.0,
+ geog_data_path = '/home/guc/wps-geog/'
+/
+
+&ungrib
+ out_format = 'WPS',
+ prefix = 'FILE',
+/
+
+&metgrid
+ fg_name = 'FILE'
+/
