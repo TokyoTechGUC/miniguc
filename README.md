@@ -82,6 +82,7 @@ However, it is also possible to modify the scripts to call from the correct dire
 * In `runs` directory, it is preferred to refer the run by its ID, i.e. the naming convention is `{id}-{run_name}`. For example, `001-test-run`, `084-grassland-modified-ahe`.
 
 ## Side Note
-A virtualbox of this mini PC WRF model is saved in an SSD of GUC laboratory, please feel free to check it out. 
+As an addition to my project, I created a [VirtualBox](https://www.virtualbox.org) file for Windows/Linux. You can check it out here:
+http://131.112.80.204/opendap/public/vm/windows/contents.html
 
-The `README` file is provided in this [wiki](https://github.com/TokyoTechGUC/miniguc/wiki/VirtualBox) as well.
+For more details, check out this virtual machine section [[Link](https://github.com/TokyoTechGUC/miniguc/wiki/Virtual-Machine)]
